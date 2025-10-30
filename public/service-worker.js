@@ -1,11 +1,20 @@
 const CACHE_NAME = "hrms-v1"
-const urlsToCache = ["/", "/offline.html", "/icons/android-launchericon-192-192.png"]
+const urlsToCache = [
+  "/",
+  "/manifest.json",
+  "/icons/android-launchericon-48-48.png",
+  "/icons/android-launchericon-72-72.png",
+  "/icons/android-launchericon-96-96.png",
+  "/icons/android-launchericon-144-144.png",
+  "/icons/android-launchericon-192-192.png",
+  "/icons/android-launchericon-512-512.png",
+]
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(urlsToCache).catch(() => {
-        console.log("Some assets failed to cache")
+      return cache.addAll(urlsToCache).catch((error) => {
+        console.log("[v0] Service Worker: Some assets failed to cache", error)
       })
     }),
   )
@@ -49,7 +58,29 @@ self.addEventListener("fetch", (event) => {
   } else {
     event.respondWith(
       caches.match(event.request).then((response) => {
-        return response || fetch(event.request)
+        if (response) {
+          return response
+        }
+        return fetch(event.request)
+          .then((response) => {
+            if (!response || response.status !== 200 || response.type === "error") {
+              return response
+            }
+            const clonedResponse = response.clone()
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, clonedResponse)
+            })
+            return response
+          })
+          .catch(() => {
+            return new Response("Offline - Resource not available", {
+              status: 503,
+              statusText: "Service Unavailable",
+              headers: new Headers({
+                "Content-Type": "text/plain",
+              }),
+            })
+          })
       }),
     )
   }

@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   description: "Employee management and attendance tracking system",
   generator: "v0.app",
   manifest: "/manifest.json",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://v0-build-me-employee-app.vercel.app"),
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -41,8 +42,12 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="ME Employee" />
-        <link rel="icon" href="/icons/android-launchericon-192-192.png" />
+        <meta name="application-name" content="ME Employee" />
+        <meta name="msapplication-TileColor" content="#1e3a8a" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        <link rel="icon" href="/icons/android-launchericon-192-192.png" type="image/png" />
         <link rel="apple-touch-icon" href="/icons/android-launchericon-192-192.png" />
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body>
         <ClientLayout>{children}</ClientLayout>
