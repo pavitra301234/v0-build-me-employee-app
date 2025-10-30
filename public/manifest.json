@@ -2,11 +2,11 @@
   "name": "ME Employee - HRMS",
   "short_name": "ME Employee",
   "description": "Employee management and attendance tracking system",
-  "start_url": "/",
+  "start_url": "/?utm_source=pwa",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#e0f2fe",
+  "background_color": "#ffffff",
   "theme_color": "#0284c7",
   "icons": [
     {
@@ -66,7 +66,7 @@
       "name": "Clock In",
       "short_name": "Clock In",
       "description": "Quick clock in to attendance",
-      "url": "/attendance?action=clockin",
+      "url": "/attendance?action=clockin&utm_source=pwa",
       "icons": [
         {
           "src": "/icons/android-launchericon-96-96.png",
@@ -79,7 +79,7 @@
       "name": "My Leaves",
       "short_name": "Leaves",
       "description": "View and apply for leaves",
-      "url": "/leaves",
+      "url": "/leaves?utm_source=pwa",
       "icons": [
         {
           "src": "/icons/android-launchericon-96-96.png",
