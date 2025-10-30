@@ -1,0 +1,84 @@
+{
+  "name": "ME Employee - HRMS",
+  "short_name": "ME Employee",
+  "description": "Employee management and attendance tracking system",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#1e3a8a",
+  "icons": [
+    {
+      "src": "/icons/android-launchericon-48-48.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/android-launchericon-72-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/android-launchericon-96-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/android-launchericon-144-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/android-launchericon-192-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/android-launchericon-512-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icons/android-launchericon-192-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Clock In",
+      "short_name": "Clock In",
+      "description": "Quick clock in to attendance",
+      "url": "/attendance?action=clockin",
+      "icons": [
+        {
+          "src": "/icons/android-launchericon-96-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "My Leaves",
+      "short_name": "Leaves",
+      "description": "View and apply for leaves",
+      "url": "/leaves",
+      "icons": [
+        {
+          "src": "/icons/android-launchericon-96-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}
