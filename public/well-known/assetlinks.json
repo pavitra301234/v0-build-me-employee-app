@@ -1,13 +1,11 @@
 [
   {
-    "relation": [
-      "delegate_permission/common.handle_all_urls"
-    ],
+    "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "REPLACE_WITH_YOUR_PACKAGE_ID",
+      "package_name": "app.vercel.hrms78.twa",
       "sha256_cert_fingerprints": [
-        "REPLACE_WITH_YOUR_SHA256_FINGERPRINT"
+        "F6:CC:F1:5D:20:CA:57:BB:DC:1B:22:18:93:BC:83:3B:D5:0E:10:BF:38:E6:90:A8:49:60:A0:07:4A:2D:14:E2"
       ]
     }
   }
