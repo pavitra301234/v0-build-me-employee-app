@@ -3,6 +3,7 @@
 import type React from "react"
 import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "@/components/auth-context"
+import { ThemeProvider } from "@/components/theme-provider"
 
 export function ClientLayout({
   children,
@@ -11,7 +12,9 @@ export function ClientLayout({
 }>) {
   return (
     <>
-      <AuthProvider>{children}</AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>{children}</AuthProvider>
+      </ThemeProvider>
       <Analytics />
       <script
         dangerouslySetInnerHTML={{

@@ -1,16 +1,15 @@
 "use client"
 
 import type React from "react"
-
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/components/auth-context"
+import { useTheme } from "@/components/theme-provider"
 import { Navigation } from "@/components/navigation"
-import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { apiClient } from "@/lib/api-client"
-import { AlertCircle, CheckCircle } from "lucide-react"
+import { AlertCircle, CheckCircle, Moon, Sun } from "lucide-react"
 
 interface Leave {
   id: string
@@ -23,6 +22,7 @@ interface Leave {
 
 export default function LeavesPage() {
   const { user, isLoading } = useAuth()
+  const { theme, toggleTheme } = useTheme()
   const router = useRouter()
   const [leaves, setLeaves] = useState<Leave[]>([])
   const [loading, setLoading] = useState(true)
@@ -87,10 +87,10 @@ export default function LeavesPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen gradient-bg flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-500 mx-auto mb-4"></div>
+          <p className="text-foreground/60">Loading...</p>
         </div>
       </div>
     )
@@ -99,40 +99,48 @@ export default function LeavesPage() {
   if (!user) return null
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-24">
-      <div className="bg-gradient-to-r from-green-600 to-green-800 text-white p-6">
-        <h1 className="text-2xl font-bold">Leaves</h1>
-        <p className="text-green-100 text-sm mt-1">Manage your leave requests</p>
+    <div className="min-h-screen gradient-bg pb-24">
+      <div className="glass-dark m-4 mt-6 p-6 flex justify-between items-start">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Leaves</h1>
+          <p className="text-foreground/60 text-sm mt-1">Manage your leave requests</p>
+        </div>
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-lg glass hover:bg-white/20 dark:hover:bg-white/10 transition-all"
+        >
+          {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+        </button>
       </div>
 
       <div className="p-4 space-y-4">
         {error && (
-          <div className="flex items-center gap-2 text-red-600 text-sm p-3 bg-red-50 rounded">
+          <div className="flex items-center gap-2 text-red-600 dark:text-red-400 text-sm p-3 bg-red-500/20 rounded">
             <AlertCircle size={16} />
             {error}
           </div>
         )}
 
         {success && (
-          <div className="flex items-center gap-2 text-green-600 text-sm p-3 bg-green-50 rounded">
+          <div className="flex items-center gap-2 text-green-600 dark:text-green-400 text-sm p-3 bg-green-500/20 rounded">
             <CheckCircle size={16} />
             {success}
           </div>
         )}
 
-        <Button onClick={() => setShowForm(!showForm)} className="w-full bg-green-600 hover:bg-green-700">
+        <Button onClick={() => setShowForm(!showForm)} className="glass-button w-full">
           {showForm ? "Cancel" : "Apply for Leave"}
         </Button>
 
         {showForm && (
-          <Card className="p-4 bg-white">
+          <div className="glass-card p-4">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Leave Type</label>
+                <label className="block text-sm font-medium text-foreground mb-2">Leave Type</label>
                 <select
                   value={formData.leave_type_id}
                   onChange={(e) => setFormData({ ...formData, leave_type_id: Number.parseInt(e.target.value) })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-3 py-2 border border-white/40 dark:border-white/20 rounded-md bg-white/20 dark:bg-white/5 text-foreground"
                 >
                   <option value={1}>Casual Leave</option>
                   <option value={2}>Sick Leave</option>
@@ -141,32 +149,34 @@ export default function LeavesPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                <label className="block text-sm font-medium text-foreground mb-2">Start Date</label>
                 <Input
                   type="date"
                   value={formData.start_date}
                   onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
                   required
+                  className="glass-input"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                <label className="block text-sm font-medium text-foreground mb-2">End Date</label>
                 <Input
                   type="date"
                   value={formData.end_date}
                   onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
                   required
+                  className="glass-input"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Reason</label>
+                <label className="block text-sm font-medium text-foreground mb-2">Reason</label>
                 <textarea
                   value={formData.reason}
                   onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
                   placeholder="Enter reason for leave"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-3 py-2 border border-white/40 dark:border-white/20 rounded-md bg-white/20 dark:bg-white/5 text-foreground placeholder-foreground/50"
                   rows={3}
                 />
               </div>
@@ -179,54 +189,54 @@ export default function LeavesPage() {
                   onChange={(e) => setFormData({ ...formData, half_day: e.target.checked })}
                   className="rounded"
                 />
-                <label htmlFor="half_day" className="text-sm text-gray-700">
+                <label htmlFor="half_day" className="text-sm text-foreground">
                   Half Day
                 </label>
               </div>
 
-              <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
+              <Button type="submit" className="glass-button w-full">
                 Submit Leave Request
               </Button>
             </form>
-          </Card>
+          </div>
         )}
 
-        <Card className="p-4 bg-white">
-          <h2 className="font-semibold text-gray-900 mb-4">Your Leaves</h2>
+        <div className="glass-card p-4">
+          <h2 className="font-semibold text-foreground mb-4">Your Leaves</h2>
 
           {loading ? (
             <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500 mx-auto"></div>
             </div>
           ) : leaves.length > 0 ? (
             <div className="space-y-3">
               {leaves.map((leave) => (
-                <div key={leave.id} className="p-3 bg-gray-50 rounded">
+                <div key={leave.id} className="p-3 bg-white/20 dark:bg-white/5 rounded">
                   <div className="flex justify-between items-start mb-2">
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-foreground">
                       {new Date(leave.start_date).toLocaleDateString()} -{" "}
                       {new Date(leave.end_date).toLocaleDateString()}
                     </p>
                     <span
                       className={`text-xs px-2 py-1 rounded ${
                         leave.status === "approved"
-                          ? "bg-green-100 text-green-700"
+                          ? "bg-green-500/30 text-green-700 dark:text-green-400"
                           : leave.status === "rejected"
-                            ? "bg-red-100 text-red-700"
-                            : "bg-yellow-100 text-yellow-700"
+                            ? "bg-red-500/30 text-red-700 dark:text-red-400"
+                            : "bg-yellow-500/30 text-yellow-700 dark:text-yellow-400"
                       }`}
                     >
                       {leave.status}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-600">{leave.reason}</p>
+                  <p className="text-xs text-foreground/60">{leave.reason}</p>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-center text-gray-600 text-sm py-8">No leave records yet</p>
+            <p className="text-center text-foreground/60 text-sm py-8">No leave records yet</p>
           )}
-        </Card>
+        </div>
       </div>
 
       <Navigation />

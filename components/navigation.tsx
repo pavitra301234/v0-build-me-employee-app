@@ -19,14 +19,16 @@ export function Navigation() {
   ]
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
+    <nav className="fixed bottom-0 left-0 right-0 glass-dark z-50 border-t border-white/20">
       <div className="flex justify-around items-center h-16">
         {navItems.map(({ href, label, icon: Icon }) => (
           <Link
             key={href}
             href={href}
-            className={`flex flex-col items-center justify-center w-full h-full gap-1 ${
-              pathname === href ? "text-blue-600 border-t-2 border-blue-600" : "text-gray-600"
+            className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-all ${
+              pathname === href
+                ? "text-sky-600 dark:text-sky-400 border-t-2 border-sky-600 dark:border-sky-400"
+                : "text-foreground/60 hover:text-foreground"
             }`}
           >
             <Icon size={24} />
@@ -35,7 +37,7 @@ export function Navigation() {
         ))}
         <button
           onClick={logout}
-          className="flex flex-col items-center justify-center w-full h-full gap-1 text-gray-600"
+          className="flex flex-col items-center justify-center w-full h-full gap-1 text-foreground/60 hover:text-foreground transition-all"
         >
           <LogOut size={24} />
           <span className="text-xs">Logout</span>

@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/components/auth-context"
+import { useTheme } from "@/components/theme-provider"
 import { Navigation } from "@/components/navigation"
-import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { apiClient } from "@/lib/api-client"
-import { MapPin, AlertCircle, CheckCircle } from "lucide-react"
+import { MapPin, AlertCircle, CheckCircle, Moon, Sun } from "lucide-react"
 
 interface AttendanceRecord {
   id: string
@@ -18,6 +18,7 @@ interface AttendanceRecord {
 
 export default function AttendancePage() {
   const { user, isLoading } = useAuth()
+  const { theme, toggleTheme } = useTheme()
   const router = useRouter()
   const [attendance, setAttendance] = useState<AttendanceRecord[]>([])
   const [loading, setLoading] = useState(true)
@@ -116,10 +117,10 @@ export default function AttendancePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen gradient-bg flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-500 mx-auto mb-4"></div>
+          <p className="text-foreground/60">Loading...</p>
         </div>
       </div>
     )
@@ -128,28 +129,36 @@ export default function AttendancePage() {
   if (!user) return null
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-24">
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-6">
-        <h1 className="text-2xl font-bold">Attendance</h1>
-        <p className="text-blue-100 text-sm mt-1">Track your daily attendance</p>
+    <div className="min-h-screen gradient-bg pb-24">
+      <div className="glass-dark m-4 mt-6 p-6 flex justify-between items-start">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Attendance</h1>
+          <p className="text-foreground/60 text-sm mt-1">Track your daily attendance</p>
+        </div>
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-lg glass hover:bg-white/20 dark:hover:bg-white/10 transition-all"
+        >
+          {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+        </button>
       </div>
 
       <div className="p-4 space-y-4">
-        <Card className="p-6 bg-white">
+        <div className="glass-card p-6">
           <div className="text-center mb-6">
             <div
               className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
-                isClockedIn ? "bg-green-100" : "bg-gray-100"
+                isClockedIn ? "bg-green-500/30" : "bg-gray-500/30"
               }`}
             >
-              <Clock size={32} className={isClockedIn ? "text-green-600" : "text-gray-600"} />
+              <Clock size={32} className={isClockedIn ? "text-green-600 dark:text-green-400" : "text-foreground/60"} />
             </div>
-            <p className="text-gray-600 text-sm mb-2">Status</p>
-            <p className="text-2xl font-bold text-gray-900">{isClockedIn ? "Clocked In" : "Clocked Out"}</p>
+            <p className="text-foreground/60 text-sm mb-2">Status</p>
+            <p className="text-2xl font-bold text-foreground">{isClockedIn ? "Clocked In" : "Clocked Out"}</p>
           </div>
 
           {location && (
-            <div className="flex items-center gap-2 text-sm text-gray-600 mb-4 p-3 bg-gray-50 rounded">
+            <div className="flex items-center gap-2 text-sm text-foreground/60 mb-4 p-3 bg-white/20 dark:bg-white/5 rounded">
               <MapPin size={16} />
               <span>
                 Lat: {location.lat.toFixed(4)}, Lon: {location.lon.toFixed(4)}
@@ -158,14 +167,14 @@ export default function AttendancePage() {
           )}
 
           {error && (
-            <div className="flex items-center gap-2 text-red-600 text-sm mb-4 p-3 bg-red-50 rounded">
+            <div className="flex items-center gap-2 text-red-600 dark:text-red-400 text-sm mb-4 p-3 bg-red-500/20 rounded">
               <AlertCircle size={16} />
               {error}
             </div>
           )}
 
           {success && (
-            <div className="flex items-center gap-2 text-green-600 text-sm mb-4 p-3 bg-green-50 rounded">
+            <div className="flex items-center gap-2 text-green-600 dark:text-green-400 text-sm mb-4 p-3 bg-green-500/20 rounded">
               <CheckCircle size={16} />
               {success}
             </div>
@@ -175,48 +184,50 @@ export default function AttendancePage() {
             <Button
               onClick={handleClockIn}
               disabled={isClockedIn}
-              className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-300"
+              className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400"
             >
               Clock In
             </Button>
             <Button
               onClick={handleClockOut}
               disabled={!isClockedIn}
-              className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-300"
+              className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400"
             >
               Clock Out
             </Button>
           </div>
-        </Card>
+        </div>
 
-        <Card className="p-4 bg-white">
-          <h2 className="font-semibold text-gray-900 mb-4">Attendance History</h2>
+        <div className="glass-card p-4">
+          <h2 className="font-semibold text-foreground mb-4">Attendance History</h2>
 
           {loading ? (
             <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500 mx-auto"></div>
             </div>
           ) : attendance.length > 0 ? (
             <div className="space-y-3">
               {attendance.map((record) => (
-                <div key={record.id} className="p-3 bg-gray-50 rounded">
+                <div key={record.id} className="p-3 bg-white/20 dark:bg-white/5 rounded">
                   <div className="flex justify-between items-start mb-2">
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-foreground">
                       {new Date(record.clock_in_at).toLocaleDateString()}
                     </p>
                     <span
                       className={`text-xs px-2 py-1 rounded ${
-                        record.clock_out_at ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
+                        record.clock_out_at
+                          ? "bg-green-500/30 text-green-700 dark:text-green-400"
+                          : "bg-yellow-500/30 text-yellow-700 dark:text-yellow-400"
                       }`}
                     >
                       {record.clock_out_at ? "Completed" : "Ongoing"}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-600 mb-2">
+                  <p className="text-xs text-foreground/60 mb-2">
                     {new Date(record.clock_in_at).toLocaleTimeString()} -{" "}
                     {record.clock_out_at ? new Date(record.clock_out_at).toLocaleTimeString() : "Ongoing"}
                   </p>
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-foreground">
                     Duration: {Math.floor(record.total_seconds / 3600)}h{" "}
                     {Math.floor((record.total_seconds % 3600) / 60)}m
                   </p>
@@ -224,9 +235,9 @@ export default function AttendancePage() {
               ))}
             </div>
           ) : (
-            <p className="text-center text-gray-600 text-sm py-8">No attendance records yet</p>
+            <p className="text-center text-foreground/60 text-sm py-8">No attendance records yet</p>
           )}
-        </Card>
+        </div>
       </div>
 
       <Navigation />
